@@ -46,12 +46,6 @@ app.get('/', (req, res) => {
   res.send('hi');
 });
 
-// DB Setup
-const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost/notes';
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
-// set mongoose promises to es6 default
-mongoose.Promise = global.Promise;
-
 // lets register a connection listener
 io.on('connection', (socket) => {
   // add these at the top of your: io.on('connection' section
@@ -122,6 +116,12 @@ io.on('connection', (socket) => {
 // START THE SERVER
 // =============================================================================
 async function startServer() {
+  // DB Setup
+  const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost/notes';
+  await mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
+  // set mongoose promises to es6 default
+  mongoose.Promise = global.Promise;
+
   try {
     const port = process.env.PORT || 9090;
     server.listen(port);
